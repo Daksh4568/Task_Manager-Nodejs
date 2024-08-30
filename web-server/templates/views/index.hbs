@@ -1,0 +1,31 @@
+{{!-- hbs is used to basically serve up more complex and dynamic pages 
+we can use static html too , like we have used before but if we want to display dynamic pages then hbs is a better option --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    
+</head>
+<body>
+    <div class="main-content">{{!-- <h1>Dynamic weather file</h1> --}}
+    {{>header}}
+    {{!-- <p>Created by {{name}}</p> --}}
+
+    <form action="submit"> 
+        <input type="text" placeholder="Location">
+        <button>Search</button>
+    </form>
+
+    <p id="message-1"></p>
+    <p id="message-2"></p>
+    </div>
+    
+    {{>footer}}
+
+    <script src="/js/index.js"></script>
+</body>
+</html>
