@@ -1,6 +1,6 @@
 const mongodb = require('mongodb'); // Import the MongoDB library
 const MongoClient = mongodb.MongoClient; // Get the MongoClient class from the MongoDB library
-const OnjectID = mongodb.ObjectId
+const ObjectID = mongodb.ObjectId
 // or we can write this as 
 // const {MongoClient , ObjectId} = require('mongodb')
 // Connection URL for MongoDB server
@@ -9,7 +9,7 @@ const connectionURL = 'mongodb://127.0.0.1:27017'; // Use '127.0.0.1' (localhost
 // Database name to connect to
 const databaseName = 'task-manager'; // Name of the database you want to work with
 
-const id = new  OnjectID()
+const id = new  ObjectID()
 console.log(id)
 // console.log(id.getTimestamp())
 // Async function to connect to the database

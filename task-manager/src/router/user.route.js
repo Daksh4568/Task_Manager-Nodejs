@@ -1,48 +1,47 @@
 const express = require('express')
 const User = require('../models/user.model')
-
+const auth = require('../middlewares/auth.js')
 const router = new express.Router()
 
 //this is the get handler which will fetch all the users
 //app.get() is used to define a route handler for HTTP GET requests. These requests are typically used to retrieve data from a server or database.
-router.get('/users' , async (req , res)=>{
+//To add middleware to an individual route we just need to pass it as an 3rd argument and add next() to it 
+// AUTH - when someone makes a get request then first the middlware function will run 
+// and after that the async function will run 
+// now the route handler will only get executed if the auth middlware have next in it 
+router.get('/users/me' , auth , async (req , res)=>{
     // we can use User.find({}) to find particular users on the basis of argument that we provide , it accepts object in the argument
-         try{
-          const users = await User.find({})
-          res.send(users)
-         } catch(e){
-            res.status(500).send(e)
-         }
+         res.send(req.user)
     })
     // async always return promise , it doesnt return any value , so we have to handle the response like that
     router.post('/users' , async (req , res)=>{ 
         const user = new User(req.body)
         try{
             await user.save()
-            res.status(201).send(user)
-    
+            const token = await user.generateAuthToken()
+            res.status(201).send({user,token})
         }
       // the below code will only run when the promise is fulfilled and thats why we are wrapping the code into try and catch    
         catch(e){
        res.status(400).send(e)
         }
-       
-      
-        
     })
+    
     router.post('/users/login' , async(req,res)=>{
          try{
          const user = await User.findByCredentials(req.body.email , req.body.password)
-         res.send(user)
+        const token = await user.generateAuthToken()
+         res.send({user , token})
         //  res.send("You are logged in")
         console.log("You are logged in")
          }catch(e){
        res.status()
            res.status(404).send(e)
            console.log("Unable to sign in")
-           //console.log(e) , there was an error in the mongoose shcema 
+           console.log(e) //, there was an error in the mongoose shcema 
          }
     })
+
     
     // we are creating a get handler which can fetch the user based on the id 
     router.get('/users/:id' , async (req,res)=>{
@@ -99,7 +98,7 @@ updates.forEach((update)=>{
                        
             await user.save()
                if(!user){
-                return res.status(404).send()
+                return res.status(404)
                }
                res.send(user) 
              
